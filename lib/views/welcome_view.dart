@@ -1,3 +1,4 @@
+import 'package:MyEyesApp/views/detector_view.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -35,7 +36,8 @@ class _WelcomeViewState extends State<WelcomeView> {
   Future<void> _initializeTts() async {
     await _flutterTts.setLanguage('es-ES');
     await _flutterTts.setPitch(1.0);
-    await _flutterTts.setSpeechRate(0.7);
+    //Velocidad de reporducción
+    await _flutterTts.setSpeechRate(0.6);
   }
 
   @override
@@ -241,11 +243,11 @@ class _WelcomeViewState extends State<WelcomeView> {
                         onPressed: () {
                           // Navegar a la pantalla Camera.dart cuando se presione el botón
                           _speakText('Comenzando, abriendo cámara');
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) => const Camara()),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const YoloVideo()),
+                          );
                         },
                         child: const Text('Comenzar'),
                       ),

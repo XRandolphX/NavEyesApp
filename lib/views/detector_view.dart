@@ -59,7 +59,9 @@ class _YoloVideoState extends State<YoloVideo> {
     }
     await controller.startImageStream((image) async {
       if (isDetecting) {
+        //Imagen con el Porcentaje
         cameraImage = image;
+        //Los frames que detecta la cámara
         yoloOnFrame(image);
       }
     });

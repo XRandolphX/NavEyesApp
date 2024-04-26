@@ -23,13 +23,17 @@ class _WelcomeViewState extends State<WelcomeView> {
     _initializeTts();
     // Obtener la fecha actual
     _getCurrentDate();
-    // Iniciar temporizador para mostrar la descripción después de 3 segundos
-    // Timer(const Duration(seconds: 3), () {
-    //   setState(() {
-    //     // Simular la acción de presionar el botón "Comenzar"
-    //     _startButtonPressed();
-    //   });
-    // });
+    _speakTexts([
+      "El botón comenzar se presionará automáticamente después de 10 segundos"
+    ]);
+
+    // Iniciar temporizador para mostrar la descripción después de 6 segundos
+    Timer(const Duration(seconds: 6), () {
+      setState(() {
+        // Simular la acción de presionar el botón "Comenzar"
+        _startButtonPressed();
+      });
+    });
   }
 
   // Método para inicializar el TTS
@@ -37,7 +41,7 @@ class _WelcomeViewState extends State<WelcomeView> {
     await _flutterTts.setLanguage('es-ES');
     await _flutterTts.setPitch(1.0);
     //Velocidad de reporducción
-    await _flutterTts.setSpeechRate(0.6);
+    await _flutterTts.setSpeechRate(0.7);
   }
 
   @override
@@ -114,27 +118,26 @@ class _WelcomeViewState extends State<WelcomeView> {
   }
 
   // Método para simular la acción de presionar el botón "Comenzar"
-  // void _startButtonPressed() {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(builder: (context) => const Camara()),
-  //   );
-  // }
+  void _startButtonPressed() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const YoloVideo()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Llamar al método _speakTexts() con la lista de textos
-          _speakTexts([
-            'Hola, ¡Bienvenido!',
-            'NavEyes mejora la navegación para personas con discapacidad visual. Con funciones accesibles, facilita la orientación y proporciona información en tiempo real para explorar el entorno con confianza',
-            'El Botón de Comenzar se presionará automáticamente después de 3 segundos',
-          ]);
-        },
-        child: const Icon(Icons.speaker_phone),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     // Llamar al método _speakTexts() con la lista de textos
+      //     _speakTexts([
+      //       'Hola, ¡Bienvenido!',
+      //       'NavEyes mejora la navegación para personas con discapacidad visual. Con funciones accesibles, facilita la orientación y proporciona información en tiempo real para explorar el entorno con confianza',
+      //     ]);
+      //   },
+      //   child: const Icon(Icons.speaker_phone),
+      // ),
       backgroundColor: const Color.fromARGB(255, 66, 82, 183),
       body: SafeArea(
         child: Column(
@@ -196,7 +199,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                     child: GestureDetector(
                       onTap: () {
                         _speakText(
-                            'NavEyes mejora la navegación para personas con discapacidad visual. Con funciones accesibles, facilita la orientación y proporciona información en tiempo real para explorar el entorno con confianza');
+                            'Hola, Bienvenido. NavEyes mejora la navegación para personas con discapacidad visual. Con funciones accesibles, facilita la orientación y proporciona información en tiempo real para explorar el entorno con confianza');
                       },
                       child: Text(
                         'NavEyes mejora la navegación para personas con discapacidad visual. Con funciones accesibles, facilita la orientación y proporciona información en tiempo real para explorar el entorno con confianza',
@@ -257,10 +260,10 @@ class _WelcomeViewState extends State<WelcomeView> {
                       GestureDetector(
                         onTap: () {
                           _speakText(
-                              'El Botón de "Comenzar" se presionará automáticamente después de 3 segundos');
+                              'El Botón de "Comenzar" se presionará automáticamente después de 10 segundos');
                         },
                         child: const Text(
-                          'El Botón de "Comenzar" se presionará automáticamente después de 3 segundos',
+                          'El Botón de "Comenzar" se presionará automáticamente después de 10 segundos',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Color.fromARGB(255, 66, 82, 183),

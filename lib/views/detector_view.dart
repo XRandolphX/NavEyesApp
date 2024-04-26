@@ -28,6 +28,9 @@ class _YoloVideoState extends State<YoloVideo> {
   late FlutterVision vision; // YOLO
   FlutterTts flutterTtsYolo = FlutterTts(); // TTS
 
+  late Timer _detectionTimer; // Timer para controlar la velocidad de detección
+  bool _isSpeaking = false; // Bandera para controlar si el TTS está hablando
+
 // En el método initState(), se inicializa la cámara, se carga el modelo YOLO y se inicia la inicialización de TTS (Texto a voz).
   @override
   void initState() {
@@ -35,24 +38,40 @@ class _YoloVideoState extends State<YoloVideo> {
 
     vision = FlutterVision(); // YOLO
     initTTS(); // TTS: El método initTTS() inicializa el motor de TTS y establece sus configuraciones.
-    init();
+    init(); // Inciializa Cámara y Modelo YOLO
+    // Decir la frase al inicio
+    speak(
+        "Estás en la Sección de detección de Objetos, presione el botón para comenzar a detectar.");
   }
 
   // El método dispose() se llama cuando el widget se elimina del árbol de widgets. Se encarga de liberar recursos, detener la cámara y cerrar el modelo YOLO.
   @override
   void dispose() async {
     // await stopDetection(); // Detener la detección antes de liberar recursos
+
     flutterTtsYolo.stop(); // TTS Stop
     vision.closeYoloModel(); // YOLO Stop
 
-    super.dispose();
     controller.dispose();
+
+    super.dispose();
+  }
+
+  void _startDetectionWithDelay() {
+    const detectionInterval =
+        Duration(milliseconds: 800); // Intervalo de detección (0.5 segundos)
+    _detectionTimer = Timer.periodic(detectionInterval, (timer) async {
+      if (!isDetecting) {
+        await startDetection(); // Iniciar detección si no está en curso
+      }
+    });
   }
 
 // Los métodos startDetection() y stopDetection() se utilizan para iniciar y detener la detección de objetos respectivamente.
   Future<void> startDetection() async {
     setState(() {
       isDetecting = true;
+      _startDetectionWithDelay(); // Iniciar detección con retraso
     });
     if (controller.value.isStreamingImages) {
       return;
@@ -72,6 +91,7 @@ class _YoloVideoState extends State<YoloVideo> {
       isDetecting = false;
       yoloResults.clear();
     });
+    _detectionTimer.cancel(); // Cancelar el timer al eliminar el widget
   }
 
 // El método initTTS() inicializa el motor de TTS y establece sus configuraciones.
@@ -79,7 +99,7 @@ class _YoloVideoState extends State<YoloVideo> {
     // TTS
     await flutterTtsYolo.setLanguage("es-ES"); // Set the language you want
     await flutterTtsYolo
-        .setSpeechRate(0.7); // Adjust speech rate (1.0 is normal)
+        .setSpeechRate(0.6); // Adjust speech rate (1.0 is normal)
     await flutterTtsYolo.setVolume(1.0); // Adjust volume (0.0 to 1.0)
     await flutterTtsYolo.setPitch(1.0); // Adjust pitch (1.0 is normal)
   }
@@ -134,11 +154,25 @@ class _YoloVideoState extends State<YoloVideo> {
         classThreshold:
             0.5); // Umbral de confianza de clase. Se aplica a cada clase individualmente. 50% o más
 
-    if (result.isNotEmpty) {
+    if (result.isNotEmpty && !_isSpeaking) {
       setState(() {
         yoloResults = result;
       });
+      _speakResults(); // Iniciar pronunciación si hay resultados y no se está hablando
     }
+  }
+
+  Future<void> _speakResults() async {
+    _isSpeaking = true; // Marcar que el TTS está hablando
+    final List<Map<String, dynamic>> resultsCopy =
+        List.from(yoloResults); // Crear una copia de yoloResults
+    for (final result in resultsCopy) {
+      final text = "${result['tag']}";
+      await speak(text); // Pronunciar el texto
+      await Future.delayed(
+          Duration(seconds: 2)); // Esperar 1 segundo entre pronunciaciones
+    }
+    _isSpeaking = false; // Marcar que el TTS ha terminado de hablar
   }
 
 // El método displayBoxesAroundRecognizedObjects() muestra cuadros delimitadores alrededor de los objetos detectados en la vista previa de la cámara.

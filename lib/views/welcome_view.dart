@@ -24,11 +24,11 @@ class _WelcomeViewState extends State<WelcomeView> {
     // Obtener la fecha actual
     _getCurrentDate();
     _speakTexts([
-      "El botón comenzar se presionará automáticamente después de 10 segundos"
+      "Hola, Bienvenido a NavEyes. El botón comenzar se presionará automáticamente después de 6 segundos"
     ]);
 
     // Iniciar temporizador para mostrar la descripción después de 6 segundos
-    Timer(const Duration(seconds: 6), () {
+    Timer(const Duration(seconds: 8), () {
       setState(() {
         // Simular la acción de presionar el botón "Comenzar"
         _startButtonPressed();
@@ -244,8 +244,6 @@ class _WelcomeViewState extends State<WelcomeView> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          // Navegar a la pantalla Camera.dart cuando se presione el botón
-                          _speakText('Comenzando, abriendo cámara');
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -260,10 +258,10 @@ class _WelcomeViewState extends State<WelcomeView> {
                       GestureDetector(
                         onTap: () {
                           _speakText(
-                              'El Botón de "Comenzar" se presionará automáticamente después de 10 segundos');
+                              'El Botón de "Comenzar" se presionará automáticamente después de 6 segundos');
                         },
                         child: const Text(
-                          'El Botón de "Comenzar" se presionará automáticamente después de 10 segundos',
+                          'El Botón de "Comenzar" se presionará automáticamente después de 6 segundos',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Color.fromARGB(255, 66, 82, 183),

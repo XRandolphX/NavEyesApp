@@ -99,7 +99,7 @@ class _YoloVideoState extends State<YoloVideo> {
     // TTS
     await flutterTtsYolo.setLanguage("es-ES"); // Set the language you want
     await flutterTtsYolo
-        .setSpeechRate(0.6); // Adjust speech rate (1.0 is normal)
+        .setSpeechRate(0.7); // Adjust speech rate (1.0 is normal)
     await flutterTtsYolo.setVolume(1.0); // Adjust volume (0.0 to 1.0)
     await flutterTtsYolo.setPitch(1.0); // Adjust pitch (1.0 is normal)
   }
@@ -170,7 +170,7 @@ class _YoloVideoState extends State<YoloVideo> {
       final text = "${result['tag']}";
       await speak(text); // Pronunciar el texto
       await Future.delayed(
-          Duration(seconds: 2)); // Esperar 1 segundo entre pronunciaciones
+          Duration(seconds: 1)); // Esperar 1 segundo entre pronunciaciones
     }
     _isSpeaking = false; // Marcar que el TTS ha terminado de hablar
   }
